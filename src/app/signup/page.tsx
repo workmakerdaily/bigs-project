@@ -98,7 +98,7 @@ export default function SignUp() {
                         value={form.password}
                         onChange={handleChange}
                         onBlur={() => setTouched((prev) => ({ ...prev, password: true }))}
-                        errorMessage={touched.password && !isValidPassword ? "비밀번호는 8자 이상, 영문+숫자+특수문자 포함." : ""}
+                        errorMessage={touched.password && !isValidPassword ? "비밀번호는 8자 이상, 영문+숫자+특수문자(!%*#?&) 포함." : ""}
                     />
 
                     <FormInput
