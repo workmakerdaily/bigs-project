@@ -6,27 +6,35 @@ import { createBoardPost, fetchBoardCategories } from "@/services/boardService";
 import { useRouter } from "next/navigation";
 import Button from "@/components/Button";
 
+// component: 게시글 작성 페이지 //
 export default function WritePage() {
+
+    // variable: 라우터 객체 //
     const router = useRouter();
 
+    // state: 게시글 작성 폼 //
     const [form, setForm] = useState({
         title: "",
         content: "",
         category: "NOTICE",
     });
+
+    // state: 파일 업로드 //
     const [file, setFile] = useState<File | null>(null);
     const [fileName, setFileName] = useState<string | null>(null);
+
+    // state: 에러 메시지 //
     const [error, setError] = useState("");
 
-    // SWR을 사용하여 카테고리 목록 불러오기
+    // state: 카테고리 데이터 가져오기 //
     const { data: categories, error: categoryError } = useSWR("/boards/categories", fetchBoardCategories);
 
-    // event handler: 입력값 변경
+    // event handler: 입력값 변경 //
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    // event handler: 파일 선택
+    // event handler: 파일 선택 //
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             const selectedFile = e.target.files[0];
@@ -35,7 +43,7 @@ export default function WritePage() {
         }
     };
 
-    // event handler: 게시글 작성
+    // event handler: 게시글 작성 //
     const handleSubmit = async () => {
         if (!form.title || !form.content) {
             setError("제목과 내용을 입력해주세요.");
@@ -51,6 +59,7 @@ export default function WritePage() {
         }
     };
 
+    // render: 게시글 작성 페이지 렌더링 //
     return (
         <div className="max-w-screen-lg mx-auto mt-20 py-4 px-8 bg-white">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold">게시글 작성</h2>

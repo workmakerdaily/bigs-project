@@ -7,15 +7,19 @@ import { FiArrowLeft, FiEdit, FiTrash } from "react-icons/fi";
 import Image from "next/image";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
+// component: 게시글 상세 페이지 //
 export default function BoardDetailPage() {
+
+    // variable: 게시글 ID 및 라우터 객체 //
     const { id } = useParams();
     const router = useRouter();
 
-    // SWR을 사용하여 게시글 상세 조회 (자동 캐싱 & 리프레시)
+    // state: 게시글 데이터 가져오기 //
     const { data: board, error, isValidating, mutate } = useSWR(id ? `/boards/${id}` : null, () => fetchBoardDetail(Number(id)), {
         revalidateOnFocus: false, // 페이지 포커싱 시 다시 요청 방지
     });
 
+    // variable: 카테고리 매핑 //
     const categoryMap: { [key: string]: string } = {
         NOTICE: "공지",
         FREE: "자유",
@@ -23,7 +27,7 @@ export default function BoardDetailPage() {
         ETC: "기타",
     };
 
-    // 게시글 삭제 기능
+    // event handler: 게시글 삭제 //
     const handleDelete = async () => {
         if (!confirm("정말로 이 게시글을 삭제하시겠습니까?")) return;
 
@@ -40,12 +44,16 @@ export default function BoardDetailPage() {
         }
     };
 
+    // render: 로딩 화면 //
     if (isValidating) return <LoadingSpinner />
 
+    // render: 에러 메시지 //
     if (error) return <div className="h-screen flex items-center justify-center text-red-500">데이터를 불러올 수 없습니다.</div>;
 
+    // render: 게시글이 존재하지 않는 경우 //
     if (!board) return <div className="h-screen flex items-center justify-center text-gray-500">게시글을 찾을 수 없습니다.</div>;
 
+    // render: 게시글 상세 페이지 렌더링 //
     return (
         <div className="max-w-screen-lg mx-auto mt-20 py-4 px-8 bg-white">
             <div className="flex items-center justify-between mb-4">

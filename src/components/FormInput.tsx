@@ -1,3 +1,4 @@
+// interface: 폼 입력 필드 Props //
 interface Props {
     label: string;
     type: string;
@@ -8,7 +9,10 @@ interface Props {
     errorMessage?: string;
 }
 
+// component: 공용 폼 입력 필드 //
 const FormInput = ({ label, type, name, value, onChange, onBlur, errorMessage }: Props) => {
+
+    // render: 공용 폼 입력 필드 렌더링 //
     return (
         <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700">{label}</label>

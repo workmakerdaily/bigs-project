@@ -1,10 +1,14 @@
+// interface: 버튼 컴포넌트 Props //
 interface Props {
     text: string;
     onClick?: () => void;
     disabled?: boolean;
 }
 
+// component: 공용 버튼 컴포넌트 //
 const Button = ({ text, onClick, disabled = false }: Props) => {
+
+    // render: 공용 버튼 컴포넌트 렌더링 //
     return (
         <button
             onClick={onClick}

@@ -8,35 +8,43 @@ import { validateEmail } from "@/utils/validation";
 import FormInput from "@/components/FormInput";
 import Button from "@/components/Button";
 
+// component: 로그인 페이지 //
 export default function SignIn() {
+
+    // variable: 라우터 객체 //
     const router = useRouter();
 
+    // state: 입력값 //
     const [form, setForm] = useState({
         username: "",
         password: "",
     });
+
+    // state: 입력 필드 포커스 여부 //
     const [touched, setTouched] = useState({
         username: false,
         password: false,
     });
+
+    // state: 에러 메시지 //
     const [error, setError] = useState("");
 
-    // ✅ 유효성 검사는 입력 필드가 `touched` 상태가 된 후 실행
+    // variable: 유효성 검사 //
     const isValidUsername = touched.username && validateEmail(form.username);
     const isPasswordEntered = touched.password && form.password.length > 0;
     const isValid = validateEmail(form.username) && form.password.length > 0;
 
-    // event handler: 입력값 변경
+    // event handler: 입력값 변경 //
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    // event handler: 입력 필드가 `blur`될 때 `touched` 활성화
+    // event handler: 입력 필드가 `blur`될 때 `touched` 활성화 //
     const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
         setTouched((prev) => ({ ...prev, [e.target.name]: true }));
     };
 
-    // event handler: 로그인
+    // event handler: 로그인 //
     const handleSignin = async () => {
         if (!isValid) return;
 
@@ -49,13 +57,14 @@ export default function SignIn() {
         }
     };
 
-
+    // effect: 로그인 상태 확인 후 자동 이동 //
     useEffect(() => {
         if (getAccessToken()) {
             router.push("/board");
         }
     }, []);
 
+    // render: 로그인 페이지 렌더링 //
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-white">
             <div className="bg-white text-black p-8 w-96">
@@ -74,7 +83,7 @@ export default function SignIn() {
                         name="username"
                         value={form.username}
                         onChange={handleChange}
-                        onBlur={handleBlur} // ✅ 포커스가 빠져나갈 때 `touched` 활성화
+                        onBlur={handleBlur}
                         errorMessage={touched.username && !validateEmail(form.username) ? "올바른 이메일 형식을 입력하세요." : ""}
                     />
 
@@ -84,7 +93,7 @@ export default function SignIn() {
                         name="password"
                         value={form.password}
                         onChange={handleChange}
-                        onBlur={handleBlur} // ✅ 포커스가 빠져나갈 때 `touched` 활성화
+                        onBlur={handleBlur}
                         errorMessage={touched.password && form.password.length === 0 ? "비밀번호를 입력하세요." : ""}
                     />
 

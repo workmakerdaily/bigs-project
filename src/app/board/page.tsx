@@ -9,24 +9,31 @@ import { FiEdit, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
+// component: 게시판 목록 페이지 //
 export default function BoardList() {
 
+    // variable: 라우터 객체 //
     const router = useRouter();
+
+    // variable: 페이지 크기 및 현재 페이지 //
     const pageSize = 10;
     const [page, setPage] = useState(0);
-    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-    // ✅ SWR을 사용하여 데이터를 가져오기
+    // state: 게시글 목록 가져오기 //
     const { data, error, isValidating } = useSWR(["/boards", page], () => fetchBoardList(page, pageSize), {
-        revalidateOnFocus: false,
+        revalidateOnFocus: false, // 페이지 포커싱 시 다시 요청 방지지
     });
 
+    // render: 로딩 화면 //
     if (error && !isValidating) {
         return <LoadingSpinner />;
     }
 
+    // variable: 게시글 목록 및 총 페이지 수 //
     const boards = data?.content ?? [];
     const totalPages = data?.totalPages ?? 1;
+
+    // variable: 카테고리 매핑 //
     const categoryMap: { [key: string]: string } = {
         NOTICE: "공지",
         FREE: "자유",
@@ -34,6 +41,7 @@ export default function BoardList() {
         ETC: "기타",
     };
 
+    // render: 게시판 목록 페이지 렌더링 //
     return (
         <div className="max-w-screen-lg mx-auto mt-20 py-4 px-8 bg-white">
             <div className="flex items-center justify-between mb-4">

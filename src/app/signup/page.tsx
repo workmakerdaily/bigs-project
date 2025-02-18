@@ -8,9 +8,12 @@ import FormInput from "@/components/FormInput";
 import Button from "@/components/Button";
 import { useRouter } from "next/navigation";
 
+// component: 회원가입 페이지 //
 export default function SignUp() {
 
+    // variable: 라우터 객체 //
     const router = useRouter();
+
     // state: 입력값 //
     const [form, setForm] = useState({
         name: "",
@@ -18,6 +21,8 @@ export default function SignUp() {
         password: "",
         confirmPassword: "",
     });
+
+    // state: 에러 메시지 //
     const [error, setError] = useState("");
 
     // state: 유효성 검사 활성화 여부 //
@@ -59,6 +64,7 @@ export default function SignUp() {
         }
     };
 
+    // render: 회원가입 페이지 렌더링 //
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-white">
             <div className="bg-white text-black p-8 w-96">

@@ -1,6 +1,7 @@
 import api from "@/middleware/axiosInterceptor";
 import { GetBoardDetail, GetBoardList, PatchBoardDetail, PostBoard } from "@/types";
 
+// function: 게시글 작성 //
 export const createBoardPost = async ({ title, content, category, file, fileName }: PostBoard) => {
     try {
         const formData = new FormData();
@@ -22,6 +23,7 @@ export const createBoardPost = async ({ title, content, category, file, fileName
     }
 };
 
+// function: 게시글 목록 가져오기 //
 export const fetchBoardList = async (page: number = 0, size: number = 10) => {
     try {
         
@@ -37,6 +39,7 @@ export const fetchBoardList = async (page: number = 0, size: number = 10) => {
     }
 };
 
+// function: 게시글 상세 조회 //
 export const fetchBoardDetail = async (id: number) => {
     try {
         const response = await api.get(`/boards/${id}`);
@@ -50,6 +53,7 @@ export const fetchBoardDetail = async (id: number) => {
     }
 };
 
+// function: 게시글 수정 //
 export const updateBoardPost = async ({id, title, content, category, file, imageUrl }: PatchBoardDetail) => {
     try {
         const formData = new FormData();
@@ -76,6 +80,7 @@ export const updateBoardPost = async ({id, title, content, category, file, image
     }
 };
 
+// function: 게시글 삭제 //
 export const deleteBoard = async (id: number) => {
     try {
         const response = await api.delete(`/boards/${id}`);
@@ -86,6 +91,7 @@ export const deleteBoard = async (id: number) => {
     }
 };
 
+// function: 게시판 카테고리 가져오기 //
 export const fetchBoardCategories = async () => {
     try {
         const response = await api.get(`/boards/categories`);
