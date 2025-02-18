@@ -15,6 +15,7 @@ export default function WritePage() {
         category: "NOTICE",
     });
     const [file, setFile] = useState<File | null>(null);
+    const [fileName, setFileName] = useState<string | null>(null);
     const [error, setError] = useState("");
 
     // SWR을 사용하여 카테고리 목록 불러오기
@@ -28,7 +29,9 @@ export default function WritePage() {
     // event handler: 파일 선택
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
+            const selectedFile = e.target.files[0];
             setFile(e.target.files[0]);
+            setFileName(selectedFile.name);
         }
     };
 
@@ -40,7 +43,7 @@ export default function WritePage() {
         }
 
         try {
-            await createBoardPost({ ...form, file });
+            await createBoardPost({ ...form, file, fileName });
             alert("게시글이 작성되었습니다!");
             router.push("/board"); // 게시판 목록으로 이동
         } catch (error: any) {

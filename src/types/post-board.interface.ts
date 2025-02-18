@@ -3,4 +3,5 @@ export default interface PostBoard {
     content: string;
     category: string;
     file?: File | null;
+    fileName?: string | null;
 }

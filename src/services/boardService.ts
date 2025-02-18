@@ -1,7 +1,7 @@
 import api from "@/middleware/axiosInterceptor";
-import { GetBoardDetail, GetBoardList, PostBoard } from "@/types";
+import { GetBoardDetail, GetBoardList, PatchBoardDetail, PostBoard } from "@/types";
 
-export const createBoardPost = async ({ title, content, category, file }: PostBoard) => {
+export const createBoardPost = async ({ title, content, category, file, fileName }: PostBoard) => {
     try {
         const formData = new FormData();
         const requestData = JSON.stringify({ title, content, category });
@@ -9,12 +9,12 @@ export const createBoardPost = async ({ title, content, category, file }: PostBo
         formData.append("request", new Blob([requestData], { type: "application/json" }));
         if (file) {
             formData.append("file", file);
+            formData.append("fileName", fileName || file.name);
         }
 
         const response = await api.post("/boards", formData, {
             headers: { "Content-Type": "multipart/form-data" },
         });
-
         return response.data;
     } catch (error: any) {
         console.error("게시글 작성 실패:", error.response?.data || error.message);
@@ -40,27 +40,35 @@ export const fetchBoardList = async (page: number = 0, size: number = 10) => {
 export const fetchBoardDetail = async (id: number) => {
     try {
         const response = await api.get(`/boards/${id}`);
-        return response.data as GetBoardDetail;
+        return {
+            ...response.data,
+            imageUrl: response.data.imageUrl || null,
+        } as GetBoardDetail;
     } catch (error) {
         console.error(`게시글(${id}) 상세 조회 실패:`, error);
         throw new Error("게시글을 불러오는 중 오류가 발생했습니다.");
     }
 };
 
-export const updateBoardPost = async (id: number, title: string, content: string, category: string, file?: File | null) => {
+export const updateBoardPost = async ({id, title, content, category, file, imageUrl }: PatchBoardDetail) => {
     try {
         const formData = new FormData();
         const requestData = JSON.stringify({ title, content, category });
 
         formData.append("request", new Blob([requestData], { type: "application/json" }));
+
         if (file) {
             formData.append("file", file);
+        }
+
+        if (imageUrl === null) {
+            formData.append("imageUrl", "");
         }
 
         const response = await api.patch(`/boards/${id}`, formData, {
             headers: { "Content-Type": "multipart/form-data" },
         });
-
+        console.log()
         return response.status === 200;
     } catch (error: any) {
         console.error(`게시글(${id}) 수정 실패:`, error.response?.data || error.message);

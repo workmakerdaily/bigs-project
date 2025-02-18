@@ -18,6 +18,7 @@ export default function EditBoardPage() {
         category: "NOTICE",
     });
     const [file, setFile] = useState<File | null>(null);
+    const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
 
@@ -32,6 +33,12 @@ export default function EditBoardPage() {
                     content: data.content,
                     category: data.boardCategory,
                 });
+
+                if (data.imageUrl) {
+                    setImageUrl(data.imageUrl);
+                }
+
+                setLoading(false);
             } catch (error: any) {
                 setError(error.message);
             } finally {
@@ -53,6 +60,7 @@ export default function EditBoardPage() {
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             setFile(e.target.files[0]);
+            setImageUrl(null);
         }
     };
 
@@ -64,7 +72,13 @@ export default function EditBoardPage() {
         }
 
         try {
-            await updateBoardPost(Number(id), form.title, form.content, form.category, file);
+            await updateBoardPost({
+                id: Number(id),
+                title: form.title,
+                content: form.content,
+                category: form.category,
+                file: file,
+            });
             alert("게시글이 수정되었습니다.");
             router.push(`/board/${id}`); // 수정 후 상세 페이지로 이동
         } catch (error: any) {
@@ -122,6 +136,9 @@ export default function EditBoardPage() {
                     }
                 </select>
 
+                {imageUrl && (
+                    <div>{imageUrl}</div>
+                )}
                 <input
                     type="file"
                     accept="image/*"

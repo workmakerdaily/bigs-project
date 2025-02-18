@@ -4,6 +4,7 @@ import PostBoard from "./post-board.interface";
 import Board from "./board.interface";
 import GetBoardList from "./get-board-list.interface";
 import GetBoardDetail from "./get-board-detail.interface";
+import PatchBoardDetail from "./patch-board-detail.interface";
 
 export type {
     SignUp,
@@ -11,5 +12,6 @@ export type {
     PostBoard,
     Board,
     GetBoardList,
-    GetBoardDetail
+    GetBoardDetail,
+    PatchBoardDetail
 }
