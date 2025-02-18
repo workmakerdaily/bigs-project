@@ -2,13 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import useProtectedRoute from "@/middleware/useProtectedRoute";
 import { fetchBoardCategories, fetchBoardDetail, updateBoardPost } from "@/services/boardService";
 import Button from "@/components/Button";
 import useSWR from "swr";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function EditBoardPage() {
-    useProtectedRoute(); // 로그인한 사용자만 접근 가능
 
     const { id } = useParams();
     const router = useRouter();
@@ -74,7 +73,7 @@ export default function EditBoardPage() {
         }
     };
 
-    if (loading) return <div className="h-screen flex items-center justify-center">게시글 불러오는 중...</div>;
+    if (loading) return <LoadingSpinner />
 
     if (error)
         return (

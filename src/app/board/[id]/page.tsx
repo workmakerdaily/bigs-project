@@ -2,14 +2,12 @@
 
 import useSWR from "swr";
 import { useRouter, useParams } from "next/navigation";
-import useProtectedRoute from "@/middleware/useProtectedRoute";
 import { deleteBoard, fetchBoardDetail } from "@/services/boardService";
 import { FiArrowLeft, FiEdit, FiTrash } from "react-icons/fi";
 import Image from "next/image";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function BoardDetailPage() {
-    useProtectedRoute(); // 로그인한 사용자만 접근 가능
-
     const { id } = useParams();
     const router = useRouter();
 
@@ -42,7 +40,7 @@ export default function BoardDetailPage() {
         }
     };
 
-    if (isValidating) return <div className="h-screen flex items-center justify-center">🔄 게시글 불러오는 중...</div>;
+    if (isValidating) return <LoadingSpinner />
 
     if (error) return <div className="h-screen flex items-center justify-center text-red-500">❌ 데이터를 불러올 수 없습니다.</div>;
 

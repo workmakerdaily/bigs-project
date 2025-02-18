@@ -1,6 +1,17 @@
 import { parseCookies } from "nookies";
+import { refreshAccessToken } from "@/services/authService";
 
-export const isAuthenticated = () => {
+export const isAuthenticated = async () => {
     const cookies = parseCookies();
-    return !!cookies.accessToken; // accessToken이 존재하면 로그인된 상태
+    if (cookies.accessToken) {
+        return true;
+    }
+
+    try {
+        console.log("🔄 액세스 토큰 없음 → 리프레시 토큰으로 자동 로그인 시도...");
+        const newAccessToken = await refreshAccessToken();
+        return !!newAccessToken;
+    } catch {
+        return false;
+    }
 };

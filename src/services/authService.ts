@@ -2,6 +2,8 @@ import { SignIn, SignUp } from "@/types";
 import { setCookie, destroyCookie, parseCookies } from "nookies";
 import api from "./api";
 
+let refreshTokenPromise: Promise<string> | null = null;
+
 export const signUpRequest = async (data: SignUp) => {
     try {
         console.log("회원가입 요청 데이터:", JSON.stringify(data));
@@ -59,39 +61,60 @@ export const getUserInfo = () => {
     return username ? { username, name: name || "이름 없음" } : null;
 };
 
-export const refreshAccessToken = async () => {
-    try {
-        const cookies = parseCookies();
-        const refreshToken = cookies.refreshToken;
-
-        const response = await api.post("/auth/refresh", { refreshToken });
-        const { accessToken, refreshToken: newRefreshToken } = response.data;
-
-        // 새로운 accessToken 저장
-        setCookie(null, "accessToken", accessToken, {
-            maxAge: 60 * 60 * 24, // 1일
-            path: "/",
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
-        });
-
-        // 새로운 refreshToken 저장
-        setCookie(null, "refreshToken", newRefreshToken, {
-            maxAge: 60 * 60 * 24 * 7, // 7일
-            path: "/",
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
-        });
-
-        return accessToken;
-    } catch (error: any) {
-        console.error("리프레시 토큰 요청 실패:", error.response?.data || error.message);
-        logout();
-        throw new Error("로그인 세션이 만료되었습니다.");
+export const refreshAccessToken = async (): Promise<string> => {
+    if (refreshTokenPromise) {
+        return refreshTokenPromise; // 중복 실행 방지
     }
+
+    refreshTokenPromise = new Promise(async (resolve, reject) => {
+        try {
+            const cookies = parseCookies();
+            const refreshToken = cookies.refreshToken;
+
+            if (!refreshToken) {
+                console.warn("🚨 리프레시 토큰 없음 → 로그인 필요");
+                logout();
+                return reject("리프레시 토큰이 없습니다.");
+            }
+
+            console.log("🔄 리프레시 토큰으로 새로운 액세스 토큰 요청 중...");
+
+            const response = await api.post("/auth/refresh", { refreshToken });
+            const { accessToken, refreshToken: newRefreshToken } = response.data;
+
+            console.log("✅ 토큰 갱신 성공!", response.data);
+
+            // 새로운 accessToken 저장
+            setCookie(null, "accessToken", accessToken, {
+                maxAge: 60 * 60 * 24, // 1일
+                path: "/",
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "strict",
+            });
+
+            // 새로운 refreshToken 저장
+            setCookie(null, "refreshToken", newRefreshToken, {
+                maxAge: 60 * 60 * 24 * 7, // 7일
+                path: "/",
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "strict",
+            });
+
+            refreshTokenPromise = null;
+            resolve(accessToken);
+        } catch (error: any) {
+            console.error("❌ 리프레시 토큰 요청 실패:", error.response?.data || error.message);
+            logout();
+            refreshTokenPromise = null;
+            reject("로그인 세션이 만료되었습니다.");
+        }
+    });
+
+    return refreshTokenPromise;
 };
 
 export const logout = () => {
     destroyCookie(null, "accessToken");
     destroyCookie(null, "refreshToken");
+    refreshTokenPromise = null;
 };

@@ -24,6 +24,7 @@ export const createBoardPost = async ({ title, content, category, file }: PostBo
 
 export const fetchBoardList = async (page: number = 0, size: number = 10) => {
     try {
+        
         const response = await api.get(`/boards?page=${page}&size=${size}&sort=id,DESC`);
         return {
             content: response.data.content as GetBoardList[], // 게시글 목록

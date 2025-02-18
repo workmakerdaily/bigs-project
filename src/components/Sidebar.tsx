@@ -5,10 +5,8 @@ import { getUserInfo, logout } from "@/services/authService";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { FiLogOut } from "react-icons/fi";
-import useProtectedRoute from "@/middleware/useProtectedRoute";
 
 export default function Sidebar() {
-    useProtectedRoute();
 
     const router = useRouter();
     const pathname = usePathname();

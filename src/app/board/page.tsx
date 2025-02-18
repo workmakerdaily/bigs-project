@@ -1,16 +1,15 @@
 "use client";
 
 import useSWR from "swr";
-import useProtectedRoute from "@/middleware/useProtectedRoute";
 import { fetchBoardList } from "@/services/boardService";
 import Link from "next/link";
 import { useState } from "react";
 import { GetBoardList } from "@/types";
 import { FiEdit, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { useRouter } from "next/navigation";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function BoardList() {
-    // useProtectedRoute();
 
     const categoryMap: { [key: string]: string } = {
         NOTICE: "공지",
@@ -31,7 +30,10 @@ export default function BoardList() {
         revalidateOnFocus: false,
     });
 
-    if (error) return <div className="text-center text-red-500">데이터를 불러올 수 없습니다.</div>;
+
+    if (error && !isValidating) {
+        return <LoadingSpinner />;
+    }
 
     const boards = data?.content ?? [];
     const totalPages = data?.totalPages ?? 1;
@@ -69,7 +71,7 @@ export default function BoardList() {
             <hr className="mt-2 mb-4 md:mb-10 border-t-2 border-gray-300" />
 
             {isValidating ? (
-                <p className="text-center text-gray-500">게시글 불러오는 중...</p>
+                <LoadingSpinner />
             ) : (
                 <ul className="space-y-2">
                     {boards.length > 0 ? (
