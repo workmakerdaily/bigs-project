@@ -6,25 +6,31 @@ import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { FiLogOut } from "react-icons/fi";
 
-export default function Sidebar() {
-
+export default function Navbar() {
     const router = useRouter();
     const pathname = usePathname();
     const [user, setUser] = useState<{ username: string; name: string } | null>(null);
-    const [isMobile, setIsMobile] = useState(false); // ✅ 모바일인지 여부
+    const [isMobile, setIsMobile] = useState(false);
+    const [shouldShowNavbar, setShouldShowNavbar] = useState(true);
 
     useEffect(() => {
+        // 로그인 및 회원가입 페이지에서는 Navbar 숨기기
+        const hideNavbarRoutes = ["/signin", "/signup"];
+        setShouldShowNavbar(!hideNavbarRoutes.includes(pathname));
+
         if (typeof window !== "undefined") {
             const userInfo = getUserInfo();
             setUser(userInfo);
         }
 
-        // ✅ 화면 크기에 따라 모바일 여부 설정
         const handleResize = () => setIsMobile(window.innerWidth < 768);
         handleResize();
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
-    }, []);
+    }, [pathname]);
+
+    // ✅ Navbar를 렌더링하지 않아야 하는 경우, return 처리
+    if (!shouldShowNavbar) return null;
 
     // 로그아웃 핸들러
     const handleLogout = () => {
