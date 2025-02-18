@@ -50,13 +50,13 @@ export default function SignUp() {
                 alert("회원가입이 완료되었습니다!");
                 localStorage.setItem("name", form.name);
                 setForm({ name: "", username: "", password: "", confirmPassword: "" });
+                router.push("/signin");
             } else {
                 setError("회원가입 실패: 이메일 중복 또는 서버 오류.");
             }
         } catch (error) {
             setError("회원가입 중 예상치 못한 오류가 발생했습니다.");
         }
-        router.push("/signin");
     };
 
     return (

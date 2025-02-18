@@ -12,8 +12,9 @@ export const signUpRequest = async (data: SignUp) => {
         console.log("회원가입 응답:", response.data);
 
         return response.status === 200;
-    } catch (error) {
-        throw new Error("회원가입에 실패했습니다.");
+    } catch (error: any) {
+        console.error("회원가입 실패:", error.response?.data || error.message);
+        throw new Error(error.response?.data?.message || "회원가입에 실패했습니다.");
     }
 };
 
@@ -59,6 +60,16 @@ export const getUserInfo = () => {
     const name = localStorage.getItem("name");
 
     return username ? { username, name: name || "이름 없음" } : null;
+};
+
+// 쿠키에서 accessToken 가져오기
+export const getAccessToken = () => {
+    return document.cookie.split("; ").find(row => row.startsWith("accessToken="))?.split("=")[1] || null;
+};
+
+// 쿠키에서 refreshToken 가져오기
+export const getRefreshToken = () => {
+    return document.cookie.split("; ").find(row => row.startsWith("refreshToken="))?.split("=")[1] || null;
 };
 
 export const refreshAccessToken = async (): Promise<string> => {

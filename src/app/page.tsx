@@ -7,6 +7,4 @@ export default function Home() {
     } else {
         redirect("/board"); // 로그인 된 경우 게시판으로 리디렉션
     }
-
-    return null; // 리디렉션이 실행되므로 아무것도 렌더링하지 않음
 }

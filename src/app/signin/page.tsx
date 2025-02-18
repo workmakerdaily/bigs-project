@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { signInRequest } from "@/services/authService";
+import { getAccessToken, signInRequest } from "@/services/authService";
 import { validateEmail } from "@/utils/validation";
 import FormInput from "@/components/FormInput";
 import Button from "@/components/Button";
@@ -48,6 +48,13 @@ export default function SignIn() {
             setError(error.message);
         }
     };
+
+
+    useEffect(() => {
+        if (getAccessToken()) {
+            router.push("/board");
+        }
+    }, []);
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-white">
