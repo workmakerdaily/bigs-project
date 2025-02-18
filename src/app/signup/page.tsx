@@ -47,10 +47,10 @@ export default function SignUp() {
         try {
             const success = await signUpRequest(form);
             if (success) {
-                alert("회원가입이 완료되었습니다!");
+                alert("회원가입되었습니다.");
                 localStorage.setItem("name", form.name);
                 setForm({ name: "", username: "", password: "", confirmPassword: "" });
-                router.push("/signin");
+                router.push("/");
             } else {
                 setError("회원가입 실패: 이메일 중복 또는 서버 오류.");
             }
@@ -116,7 +116,7 @@ export default function SignUp() {
 
                 <div className="mt-5 text-center text-sm text-gray-600">
                     이미 계정이 있으신가요?{" "}
-                    <a href="/signin" className="text-[#2D6CDF] cursor-pointer hover:underline">로그인</a>
+                    <a href="/" className="text-[#2D6CDF] cursor-pointer hover:underline">로그인</a>
                 </div>
             </div>
         </div>

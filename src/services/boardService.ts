@@ -17,7 +17,7 @@ export const createBoardPost = async ({ title, content, category, file }: PostBo
 
         return response.data;
     } catch (error: any) {
-        console.error("❌ 게시글 작성 실패:", error.response?.data || error.message);
+        console.error("게시글 작성 실패:", error.response?.data || error.message);
         throw new Error(error.response?.data?.message || "게시글 작성에 실패했습니다.");
     }
 };
@@ -42,7 +42,7 @@ export const fetchBoardDetail = async (id: number) => {
         const response = await api.get(`/boards/${id}`);
         return response.data as GetBoardDetail;
     } catch (error) {
-        console.error(`❌ 게시글(${id}) 상세 조회 실패:`, error);
+        console.error(`게시글(${id}) 상세 조회 실패:`, error);
         throw new Error("게시글을 불러오는 중 오류가 발생했습니다.");
     }
 };
@@ -63,7 +63,7 @@ export const updateBoardPost = async (id: number, title: string, content: string
 
         return response.status === 200;
     } catch (error: any) {
-        console.error(`❌ 게시글(${id}) 수정 실패:`, error.response?.data || error.message);
+        console.error(`게시글(${id}) 수정 실패:`, error.response?.data || error.message);
         throw new Error(error.response?.data?.message || "게시글 수정에 실패했습니다.");
     }
 };
@@ -73,7 +73,7 @@ export const deleteBoard = async (id: number) => {
         const response = await api.delete(`/boards/${id}`);
         return response.status === 200;
     } catch (error) {
-        console.error("❌ 게시글 삭제 실패:", error);
+        console.error("게시글 삭제 실패:", error);
         throw new Error("게시글 삭제에 실패했습니다.");
     }
 };
@@ -83,7 +83,7 @@ export const fetchBoardCategories = async () => {
         const response = await api.get(`/boards/categories`);
         return response.data; // 카테고리 데이터 반환
     } catch (error) {
-        console.error("❌ 게시판 카테고리 불러오기 실패:", error);
+        console.error("게시판 카테고리 불러오기 실패:", error);
         throw new Error("카테고리 정보를 가져올 수 없습니다.");
     }
 };

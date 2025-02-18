@@ -15,7 +15,7 @@ export default function Navbar() {
 
     useEffect(() => {
         // 로그인 및 회원가입 페이지에서는 Navbar 숨기기
-        const hideNavbarRoutes = ["/signin", "/signup"];
+        const hideNavbarRoutes = ["/", "/signup"];
         setShouldShowNavbar(!hideNavbarRoutes.includes(pathname));
 
         if (typeof window !== "undefined") {
@@ -35,7 +35,7 @@ export default function Navbar() {
     // 로그아웃 핸들러
     const handleLogout = () => {
         logout();
-        router.push("/signin");
+        router.push("/");
     };
 
     return (

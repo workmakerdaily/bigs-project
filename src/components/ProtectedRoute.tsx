@@ -12,7 +12,7 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     // 보호 예외 페이지 (로그인 & 회원가입 페이지)
-    const publicRoutes = ["/signin", "/signup"];
+    const publicRoutes = ["/", "/signup"];
 
     useEffect(() => {
         // 로그인 또는 회원가입 페이지는 보호하지 않음
@@ -49,7 +49,7 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
 
     useEffect(() => {
         if (!isLoading && !isAuthenticated && !publicRoutes.includes(pathname)) {
-            router.push("/signin");
+            router.push("/");
         }
     }, [isLoading, isAuthenticated, pathname, router]);
 

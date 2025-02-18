@@ -42,9 +42,9 @@ export default function BoardDetailPage() {
 
     if (isValidating) return <LoadingSpinner />
 
-    if (error) return <div className="h-screen flex items-center justify-center text-red-500">❌ 데이터를 불러올 수 없습니다.</div>;
+    if (error) return <div className="h-screen flex items-center justify-center text-red-500">데이터를 불러올 수 없습니다.</div>;
 
-    if (!board) return <div className="h-screen flex items-center justify-center text-gray-500">❌ 게시글을 찾을 수 없습니다.</div>;
+    if (!board) return <div className="h-screen flex items-center justify-center text-gray-500">게시글을 찾을 수 없습니다.</div>;
 
     return (
         <div className="max-w-screen-lg mx-auto mt-20 py-4 px-8 bg-white">
@@ -62,11 +62,11 @@ export default function BoardDetailPage() {
 
             <hr className="mt-2 mb-4 md:mb-10 border-t-2 border-gray-300" />
 
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-2 md:mb-4">
                 <h2 className="text-xl md:text-2xl font-bold">{board.title}</h2>
 
                 {/* 수정/삭제 버튼 그룹 */}
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-6">
                     <button
                         onClick={() => router.push(`/board/${id}/update`)}
                         className="text-gray-500 hover:text-gray-700 transition"
@@ -83,7 +83,7 @@ export default function BoardDetailPage() {
                 </div>
             </div>
 
-            <p className="text-gray-500 text-sm mb-4">
+            <p className="text-gray-500 text-xs md:text-sm mb-4">
                 {categoryMap[board.boardCategory] || "기타"} | {new Date(board.createdAt).toLocaleDateString()}
             </p>
 
@@ -100,7 +100,7 @@ export default function BoardDetailPage() {
                 </div>
             )}
 
-            <p className="text-lg">{board.content}</p>
+            <p className="text-md md:text-lg">{board.content}</p>
 
         </div>
     );
